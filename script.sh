@@ -30,7 +30,7 @@ if [ $red = 0 ]; then
 	virsh net-create /home/dani/Documentos/HLC/nat.xml
 	sleep 2s
 	clear
-	echo "Red creada:"
+	echo "Red creada"
 else
 	echo "Hay redes virtuales creadas"
 fi
@@ -112,11 +112,14 @@ clear
 echo "Momento de pausa para verificar todo"
 echo "Por favor dale a enter"
 read conf
+clear
 
 
 
 
 
+echo "Vamos a comprobar el consumo de la RAM"
+echo ""
 #control de ram
 mem=$(ssh root@192.168.26.118 cat /proc/meminfo| grep MemAvailable | egrep -o "[0-9]{1,8}" > a)
 a=$(cat a)
@@ -137,7 +140,7 @@ clear
 #
 #
 #
-#stress -d 1000 --timeout 10
+#		stress -d 1000 --timeout 10
 #
 #
 #
@@ -161,7 +164,7 @@ sleep 3s
 clear
 echo "Vamos a arrancar la otra máquina"
 virsh start mv2
-sleep 10s
+sleep 20s
 clear
 
 
@@ -196,12 +199,12 @@ fi
 echo "Procedemos a añadirle el volumen que hemos quitado a mv1 anteriomente, que ya esta redimensionando y vamos a montarlo"
 echo ""
 lsblk | grep disco
-sleep 5s
+sleep 8s
 clear
 
 #añadir volumen a la maquina virtual
 virsh -c qemu:///system attach-disk mv2 /dev/mapper/ASIR-disco sdb
-sleep 3s
+sleep 5s
 
 #montaje del volumen
 ssh root@192.168.26.156 mount /dev/sdb /var/www/html
@@ -223,6 +226,17 @@ while [ $a -ge 204800 ]; do
 	mem=$(ssh root@192.168.26.156 cat /proc/meminfo| grep MemAvailable | egrep -o "[0-9]{1,8}" > a)
 	a=$(cat a)
 done
+#
+#
+#
+#
+#
+#		stress -d 5000 --timeout 10
+#
+#
+#
+#
+#
 
 rm -r a
 clear
@@ -249,7 +263,7 @@ echo "Momento de pausa para verificar todo"
 echo "Por favor dale a enter"
 read conf
 clear
-
+virsh shutdown mv2
 echo "FIN DEL SCRIPT"
 sleep 2s
 clear
